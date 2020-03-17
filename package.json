@@ -2,7 +2,7 @@
   "name": "atto-chat-frontend",
   "version": "0.1.0",
   "repository": "github:VFabricio/atto-chat-frontend",
-  "license": "AGLP-3.0-or-later",
+  "license": "AGPL-3.0-or-later",
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
@@ -11,6 +11,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.0.0",
     "@rollup/plugin-node-resolve": "^7.0.0",
+    "eslint": "^6.8.0",
     "rollup": "^1.20.0",
     "rollup-plugin-livereload": "^1.0.0",
     "rollup-plugin-svelte": "^5.0.3",
