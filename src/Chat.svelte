@@ -4,7 +4,11 @@
   export let username
   let message
 
+<<<<<<< HEAD
   const dispatch = createEventDispatcher()
+=======
+  const dispatch = createEventDispatcher();
+>>>>>>> 9ce980269d34e34632d26d547eadea124c96b977
   const createPayload = input => ({
     message: input,
     time: Date.now(),
