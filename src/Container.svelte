@@ -2,15 +2,12 @@
   import Login from './Login.svelte'
   import Chat from './Chat.svelte'
 
-  let loggedIn = false
+  export let state
 
-  const handleLogin = () => {
-    loggedIn = true
-  }
 </script>
 
-{#if !loggedIn}
-  <Login on:login={handleLogin}/>
+{#if state && state.loggedIn}
+  <Chat username={state.username}/>
 {:else}
-  <Chat/>
+  <Login on:login/>
 {/if}
