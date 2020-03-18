@@ -1,6 +1,6 @@
 <script>
   import { union } from 'folktale/adt/union'
-  import { assoc, compose } from 'ramda'
+  import { append, assoc, compose, lensProp, over } from 'ramda'
   import { merge } from 'rxjs'
   import { map, pluck, scan, startWith } from 'rxjs/operators'
   import { onMount } from 'svelte'
@@ -15,20 +15,28 @@
     // UI Inputs
 
     const login$ = fromSvelteComponent(container, 'login')
+    const message$ = fromSvelteComponent(container, 'message')
 
     // Commands
 
     const Command = union('Command', {
-      Login(username) { return { username } },
+      Login({ username }) { return { username } },
+      Message({ message, time }) { return { message, time } },
     })
 
     const loginCommand$ = login$.pipe(
-      pluck('detail', 'username'),
+      pluck('detail'),
       map(Command.Login),
+    )
+
+    const messageCommand$ = message$.pipe(
+      pluck('detail'),
+      map(Command.Message),
     )
 
     const commands$ = merge(
       loginCommand$,
+      messageCommand$,
     )
 
     // State
@@ -38,6 +46,11 @@
         assoc('username', username),
         assoc('loggedIn', true),
       )(state),
+      Message: messageDetails => over(
+        lensProp('messages'),
+        append(messageDetails),
+        state,
+      ),
     })
 
     state$ = commands$.pipe(
