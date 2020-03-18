@@ -45,13 +45,12 @@
       Login: ({ username }) => compose(
         assoc('username', username),
         assoc('loggedIn', true),
-      )(state),
+      ),
       Message: messageDetails => over(
         lensProp('messages'),
         append(messageDetails),
-        state,
       ),
-    })
+    })(state)
 
     state$ = commands$.pipe(
       scan(updateState, {}),
