@@ -1,8 +1,8 @@
-import { compose } from 'ramda'
+import { bind, compose } from 'ramda'
 import { Observable } from 'rxjs'
 
 const createObserverCb = (component, eventType) => (
-  observer => component.$on(eventType, observer.next.bind(observer))
+  observer => component.$on(eventType, bind(observer.next, observer))
 )
 
 const fromSvelteComponent = compose(Observable.create, createObserverCb)
