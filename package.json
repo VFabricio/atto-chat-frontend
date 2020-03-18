@@ -22,6 +22,7 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "ramda": "^0.27.0",
     "rxjs": "^6.5.4",
     "sirv-cli": "^0.4.4"
   }
