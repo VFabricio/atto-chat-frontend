@@ -3,6 +3,7 @@
   import { append, assoc, compose, lensProp, over } from 'ramda'
   import { merge } from 'rxjs'
   import { map, pluck, scan, startWith } from 'rxjs/operators'
+  import { webSocket } from 'rxjs/webSocket'
   import { onMount } from 'svelte'
   import fromSvelteComponent from './fromSvelteComponent'
   import Container from './Container.svelte'
@@ -57,9 +58,16 @@
       startWith({}),
     )
 
+    // WebSocket
+
+    const wsSubject = webSocket('ws://localhost:8080')
+
+    wsSubject.next('hi from the front!')
+
     // Subscriptions
 
     state$.subscribe(console.log)
+    wsSubject.subscribe(console.log)
   }
 
   onMount(init)
