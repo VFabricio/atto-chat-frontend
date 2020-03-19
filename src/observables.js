@@ -40,9 +40,9 @@ const initializeObservers = container => {
       assoc('username', username),
       assoc('loggedIn', true),
     ),
-    Message: messageDetails => over(
+    Message: ({ message, time }) => over(
       lensProp('messages'),
-      append(messageDetails),
+      append({ message, time }),
     ),
   })(state)
 
