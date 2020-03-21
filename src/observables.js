@@ -1,4 +1,4 @@
-import { union } from 'folktale/adt/union'
+import { derivations, union } from 'folktale/adt/union'
 import { append, assoc, compose, lensProp, over } from 'ramda'
 import { merge } from 'rxjs'
 import { map, pluck, scan, startWith } from 'rxjs/operators'
@@ -6,43 +6,75 @@ import { webSocket } from 'rxjs/webSocket'
 import fromSvelteComponent from './fromSvelteComponent'
 
 const initializeObservers = container => {
+  // WebSocket
+
+  const wsURI = 'ws:/192.168.15.22:8080'
+  const wsSubject = webSocket(wsURI)
+
   // UI Inputs
 
   const login$ = fromSvelteComponent(container, 'login')
   const message$ = fromSvelteComponent(container, 'message')
 
-  // Commands
+  // Dispatches
 
-  const Command = union('Command', {
+  const Dispatch = union('Dispatch', {
     Login({ username }) { return { username } },
     Message({ message, time }) { return { message, time } },
-  })
-
-  const loginCommand$ = login$.pipe(
-    pluck('detail'),
-    map(Command.Login),
+  }).derive(
+    derivations.equality,
+    derivations.serialization,
   )
 
-  const messageCommand$ = message$.pipe(
-    pluck('detail'),
-    map(Command.Message),
+  const makeDispatcher = constructor => source => (
+    source.pipe(
+      pluck('detail'),
+      map(constructor),
+    )
   )
 
-  const commands$ = merge(
-    loginCommand$,
-    messageCommand$,
+  const loginDispatch$ = login$.pipe(
+    makeDispatcher(Dispatch.Login),
+  )
+
+  const messageDispatch$ = message$.pipe(
+    makeDispatcher(Dispatch.Message),
+  )
+
+  const dispatch$ = merge(
+    loginDispatch$,
+    messageDispatch$,
+  ).pipe(
+  )
+
+  // Commands
+  const Command = union('Command', {
+    SetUser({ username }) { return { username } },
+    RepeatedUser({ username }) { return { username } },
+    NewMessage({ message, sender, time }) { return { message, sender, time } },
+  }).derive(
+    derivations.equality,
+    derivations.serialization,
+  )
+
+  const commands$ = wsSubject.pipe(
+    map(json => Command.fromJSON(json)),
   )
 
   // State
 
   const updateState = (state, command) => command.matchWith({
-    Login: ({ username }) => compose(
+    SetUser: ({ username }) => compose(
       assoc('username', username),
       assoc('loggedIn', true),
     ),
-    Message: ({ message, time }) => over(
+    RepeatedUser: ({ username }) => compose(
+      assoc('repeatedUserName', username),
+      assoc('repeatedUser', true),
+    ),
+    NewMessage: ({ message, sender, time }) => over(
       lensProp('messages'),
-      append({ message, time }),
+      append({ message, sender, time }),
     ),
   })(state)
 
@@ -51,16 +83,11 @@ const initializeObservers = container => {
     startWith({}),
   )
 
-  // WebSocket
-
-  const wsSubject = webSocket('ws://localhost:8080')
-
-  wsSubject.next('hi from the front!')
-
   // Subscriptions
 
   state$.subscribe(console.log)
-  wsSubject.subscribe(console.log)
+
+  dispatch$.subscribe(wsSubject)
 
   return state$
 }
