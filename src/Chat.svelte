@@ -9,7 +9,10 @@
     message: input,
     time: Date.now(),
   })
-  const handleSubmit = () => dispatch('message', createPayload(message))
+  const handleSubmit = () => {
+    dispatch('message', createPayload(message))
+    message = ''
+  }
 </script>
 
 <p>Hello, {username}!</p>
