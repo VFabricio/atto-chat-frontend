@@ -55,7 +55,7 @@
 </style>
 
 <main>
-  <p>Hello, {username}!</p>
+  <p>You are logged in as {username}!</p>
 
   <form on:submit|preventDefault={handleSubmit}>
     <input
