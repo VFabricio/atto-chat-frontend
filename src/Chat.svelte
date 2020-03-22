@@ -18,9 +18,6 @@
   const formatTime = timestamp => {
     const options = {
       hour12: false,
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
       hour: 'numeric',
       minute: 'numeric',
     }
@@ -29,22 +26,52 @@
   }
 </script>
 
-<p>Hello, {username}!</p>
+<style>
+  main {
+    padding: var(--spacing);
+  }
 
-<form on:submit|preventDefault={handleSubmit}>
-  <input
-    bind:value={message}
-    placeholder="Type your message"
-  >
-  <button>Send</button>
-</form>
+  .message {
+    background-color: var(--color-secondary-light);
+    padding: calc(var(--spacing) / 2);
+    min-width: 5em;
+    width: min-content;
+    margin-bottom: 1em;
+  }
 
-{#if messages}
-  {#each messages as { message, time, sender }}
-    <div class="message">
-      <p>{sender} said:</p>
-      <p>{message}</p>
-      <p>{formatTime(time)}</p>
-    </div>
-  {/each}
-{/if}
+  .sender {
+    font-size: .7em;
+    margin-top: 0;
+  }
+
+  .time {
+    font-size: .7em;
+    margin-bottom: 0;
+  }
+
+  form input{
+    width: 60vw;
+  }
+</style>
+
+<main>
+  <p>Hello, {username}!</p>
+
+  <form on:submit|preventDefault={handleSubmit}>
+    <input
+      bind:value={message}
+      placeholder="Type your message"
+    >
+    <button>Send</button>
+  </form>
+
+  {#if messages}
+    {#each messages as { message, time, sender }}
+      <div class="message">
+        <p class="sender">{sender} said:</p>
+        <p>{message}</p>
+        <p class="time">{formatTime(time)}</p>
+      </div>
+    {/each}
+  {/if}
+</main>
