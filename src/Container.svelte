@@ -7,7 +7,7 @@
 </script>
 
 {#if state && state.loggedIn}
-  <Chat on:message username={state.username}/>
+  <Chat on:message messages={state.messages} username={state.username}/>
 {:else}
   <Login on:login/>
 {/if}
