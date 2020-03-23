@@ -34,9 +34,9 @@
   .message {
     background-color: var(--color-secondary-light);
     padding: calc(var(--spacing) / 2);
-    min-width: 5em;
-    width: min-content;
     margin-bottom: 1em;
+    max-width: max-content;
+    min-width: 10em;
   }
 
   .sender {

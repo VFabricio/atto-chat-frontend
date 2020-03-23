@@ -8,7 +8,7 @@ import fromSvelteComponent from './fromSvelteComponent'
 const initializeObservers = container => {
   // WebSocket
 
-  const wsURI = 'ws:/192.168.15.22:8080'
+  const wsURI = 'ws://atto-chat.sa-east-1.elasticbeanstalk.com:3000'
   const wsSubject = webSocket(wsURI)
 
   // UI Inputs
