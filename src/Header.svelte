@@ -1,5 +1,5 @@
 <style>
-  header {
+  div {
     background-color: var(--color-primary-dark);
     color: white;
     padding: var(--spacing);
@@ -17,7 +17,7 @@
   }
 </style>
 
-<header>
+<div>
   <h1>Atto Chat</h1>
   <h2>The microscopic chat app</h2>
-</header>
+</div>

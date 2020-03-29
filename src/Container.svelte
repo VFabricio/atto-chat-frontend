@@ -12,6 +12,7 @@
    flex-direction: column;
    align-items: center;
    width: 100%;
+   height: 100%;
  }
 
  header {
@@ -21,6 +22,7 @@
 
  main {
    width: 100%;
+   flex-grow: 1;
  }
 
 </style>
