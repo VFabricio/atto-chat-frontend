@@ -1,5 +1,5 @@
 <script>
-  import { createEventDispatcher } from 'svelte'
+  import { afterUpdate, createEventDispatcher } from 'svelte'
 
   export let username
   export let messages
@@ -24,19 +24,47 @@
     const date = new Date(timestamp)
     return Intl.DateTimeFormat('en-US', options).format(date)
   }
+
+  const scrollMessages = () => {
+    const messagesArea = document.querySelector('.messages')
+    const { height } = messagesArea.getBoundingClientRect()
+    messagesArea.scrollBy({ top: height, behavior: 'smooth' })
+  }
+
+  afterUpdate(scrollMessages)
 </script>
 
 <style>
-  main {
+  .contents {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: 100%;
+  }
+
+  .name-display {
+    height: 25px;
     padding: var(--spacing);
+  }
+
+  .messages {
+    flex-grow: 1;
+    flex-shrink: 1;
+    width: 100%;
+    overflow: auto;
+    margin: 20px 0;
+    padding-top: 10px;
+    padding-left: var(--spacing)
   }
 
   .message {
     background-color: var(--color-secondary-light);
     padding: calc(var(--spacing) / 2);
     margin-bottom: 1em;
+    border-radius: 8px;
     max-width: max-content;
     min-width: 10em;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3)
   }
 
   .sender {
@@ -49,13 +77,43 @@
     margin-bottom: 0;
   }
 
+  form {
+    width: 100%;
+    padding: 15px 0 15px var(--spacing);
+    background-color: var(--color-primary-dark)
+  }
+
+  form button {
+    margin: 0;
+    border-radius: 6px;
+    background-color: var(--color-primary-light)
+  }
+
   form input{
     width: 60vw;
+    margin: 0;
+    border-radius: 8px;
+  }
+
+  p {
+    margin: 0;
   }
 </style>
 
-<main>
-  <p>You are logged in as {username}!</p>
+<div class="contents">
+  <p class="name-display">You are logged in as {username}!</p>
+
+  <div class="messages">
+    {#if messages}
+      {#each messages as { message, time, sender }}
+        <div class="message">
+          <p class="sender">{sender} said:</p>
+          <p>{message}</p>
+          <p class="time">{formatTime(time)}</p>
+        </div>
+      {/each}
+    {/if}
+  </div>
 
   <form on:submit|preventDefault={handleSubmit}>
     <input
@@ -64,14 +122,4 @@
     >
     <button>Send</button>
   </form>
-
-  {#if messages}
-    {#each messages as { message, time, sender }}
-      <div class="message">
-        <p class="sender">{sender} said:</p>
-        <p>{message}</p>
-        <p class="time">{formatTime(time)}</p>
-      </div>
-    {/each}
-  {/if}
-</main>
+</div>
