@@ -12,30 +12,33 @@
    flex-direction: column;
    align-items: center;
    width: 100%;
-   height: 100%;
+   height: 100vh;
  }
 
  header {
    width: 100%;
-   height: 100px;
+   flex: 0 0 100px;
  }
 
  main {
    width: 100%;
-   flex-grow: 1;
+   flex: 1 1 auto;
+   overflow: hidden;
  }
 
 </style>
 
 <div class="container">
-  <header>
-    <Header/>
-  </header>
-  <main>
-    {#if state && state.loggedIn}
+  {#if state && state.loggedIn}
+    <main>
       <Chat on:message messages={state.messages} username={state.username}/>
-    {:else}
+    </main>
+  {:else}
+    <header>
+      <Header/>
+    </header>
+    <main>
       <Login on:login/>
-    {/if}
-  </main>
+    </main>
+  {/if}
 </div>
