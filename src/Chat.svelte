@@ -11,8 +11,10 @@
     time: Date.now(),
   })
   const handleSubmit = () => {
-    dispatch('message', createPayload(message))
-    message = ''
+    if (message.trimStart()) {
+      dispatch('message', createPayload(message))
+      message = ''
+    }
   }
 
   const formatTime = timestamp => {
