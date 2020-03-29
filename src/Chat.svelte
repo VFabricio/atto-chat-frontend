@@ -122,6 +122,7 @@
 
   <form on:submit|preventDefault={handleSubmit}>
     <input
+      aria-label="message-input"
       bind:value={message}
       placeholder="Type your message"
     >
