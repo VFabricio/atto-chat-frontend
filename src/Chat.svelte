@@ -80,21 +80,24 @@
   }
 
   form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
-    padding: 15px 0 15px var(--spacing);
+    padding: 15px var(--spacing);
     background-color: var(--color-primary-dark)
   }
 
   form button {
-    margin: 0;
+    margin: 0 0 0 10px;
     border-radius: 6px;
     background-color: var(--color-primary-light)
   }
 
   form input{
-    width: 60vw;
     margin: 0;
     border-radius: 8px;
+    flex-grow: 1;
   }
 
   p {
